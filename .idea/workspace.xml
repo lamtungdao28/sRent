@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bc07fb98-a3ed-4dc8-85fe-b793ea10e781" name="Changes" comment="first commit">
+    <list default="true" id="bc07fb98-a3ed-4dc8-85fe-b793ea10e781" name="Changes" comment="backend commit">
+      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sRent-backend/compose.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sRent-backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sRent-backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sRent-backend/src/main/java/com/ptit/sRent/SRentApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sRent-backend/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sRent-backend/src/test/java/com/ptit/sRent/SRentApplicationTests.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +36,65 @@
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0000000072149169" />
+      <entry key="S5" value="1.0027150151755275" />
+      <entry key="S10" value="1.2014654380844398" />
+      <entry key="S30" value="5.165228785645099" />
+      <entry key="S60" value="12.046145440042098" />
+      <entry key="M2" value="23.456310869447" />
+      <entry key="M5" value="47.45285620714098" />
+      <entry key="M10" value="66.64691591508657" />
+      <entry key="M15" value="75.72885213509659" />
+      <entry key="M30" value="86.69607653574963" />
+      <entry key="H1" value="93.0235837943623" />
+      <entry key="H2" value="96.42622082396161" />
+      <entry key="H4" value="98.19113245073822" />
+      <entry key="D1" value="99.69541854946482" />
+      <entry key="W1" value="99.95641168468573" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="6.160883002758248E-12" />
+      <entry key="MS500" value="0.005727018582770345" />
+      <entry key="S2" value="0.2750946595260297" />
+      <entry key="S5" value="0.5994616089343832" />
+      <entry key="S10" value="0.9738191695795866" />
+      <entry key="S30" value="5.08181497975283" />
+      <entry key="S60" value="12.002834647615018" />
+      <entry key="M2" value="23.433942221580892" />
+      <entry key="M5" value="47.44351599142641" />
+      <entry key="M10" value="66.64211076816368" />
+      <entry key="M15" value="75.72560764070101" />
+      <entry key="M30" value="86.69442987777896" />
+      <entry key="H1" value="93.02275349463176" />
+      <entry key="H2" value="96.42580380855556" />
+      <entry key="H4" value="98.19092346029768" />
+      <entry key="D1" value="99.695383649241" />
+      <entry key="W1" value="99.95640669724312" />
+    </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6,
@@ -85,7 +140,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1794070031436</updated>
-      <workItem from="1794070032520" duration="2183000" />
+      <workItem from="1794070032520" duration="3229000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -111,7 +166,15 @@
       <option name="project" value="LOCAL" />
       <updated>1794070790434</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="backend commit">
+      <option name="closed" value="true" />
+      <created>1794074177896</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1794074177896</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -130,6 +193,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="first commit" />
+    <MESSAGE value="backend commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="backend commit" />
   </component>
 </project>
