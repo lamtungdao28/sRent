@@ -1,0 +1,3 @@
+package com.srent.ekyc; import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty; import org.springframework.stereotype.Component; import java.util.*;
+@Component @ConditionalOnProperty(name="app.providers.ekyc-mode",havingValue="mock",matchIfMissing=true)
+public class MockEkycProvider implements EkycProvider {public Result process(Input i){var a=new ArrayList<String>();if(i.documentKeys().size()<2)a.add("Thiếu ảnh hai mặt giấy tờ hoặc giấy tờ quyền cho thuê");return new Result("MOCK OCR: legalName="+i.legalName()+"; identityNumber=***"+i.identityNumber().substring(Math.max(0,i.identityNumber().length()-4)),a);}public String name(){return "MOCK_EKYC";}public boolean simulated(){return true;}}

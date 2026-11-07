@@ -1,0 +1,2 @@
+package com.srent.payment; import org.springframework.data.domain.*; import org.springframework.data.jpa.repository.JpaRepository; import java.util.*;
+public interface PaymentRepository extends JpaRepository<Payment,UUID>{Page<Payment> findAllByStudentIdOrLandlordId(UUID s,UUID l,Pageable p);Page<Payment> findAllByOrderByCreatedAtDesc(Pageable p);boolean existsByBookingIdAndStatusIn(UUID id,Collection<Payment.Status>s);}

@@ -1,0 +1,2 @@
+package com.srent.media; import org.springframework.data.domain.*; import org.springframework.data.jpa.repository.JpaRepository; import java.util.*;
+public interface RoomVideoRepository extends JpaRepository<RoomVideo,UUID>{Optional<RoomVideo> findFirstByRoomIdAndStatusOrderByUpdatedAtDesc(UUID roomId,RoomVideo.Status status);Optional<RoomVideo> findByUploadToken(String token);Page<RoomVideo> findAllByStatus(RoomVideo.Status status,Pageable p);long countByStatus(RoomVideo.Status status);}

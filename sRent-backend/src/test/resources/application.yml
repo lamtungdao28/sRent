@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:srent;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
+    username: sa
+    password:
+  flyway.enabled: false
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: create-drop
+app:
+  jwt:
+    secret: test-secret-that-is-at-least-thirty-two-bytes-long
+    expiration: PT1H
+  storage:
+    endpoint: http://localhost:19000
+    public-endpoint: http://localhost:19000
+    access-key: test
+    secret-key: testtest
+    public-bucket: test-public
+    private-bucket: test-private
+    presign-expiry: PT15M
+    initialize: false
+  media:
+    gps-radius-meters: 50
+    max-gps-accuracy-meters: 30
+    max-location-age: PT5M
+    max-video-size-bytes: 104857600
+  providers:
+    ekyc-mode: mock
+    contract-mode: mock
+  ct01-font-path: /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
+  seed-enabled: false

@@ -1,0 +1,66 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: srent
+      POSTGRES_USER: ${POSTGRES_USER:-srent}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports: ["${POSTGRES_PORT:-5432}:5432"]
+    volumes: ["postgres_data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  minio:
+    build:
+      context: ./infra/minio
+      dockerfile: Dockerfile
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-srentminio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Set MINIO_ROOT_PASSWORD in .env}
+    ports: ["${MINIO_PORT:-9000}:9000", "${MINIO_CONSOLE_PORT:-9001}:9001"]
+    volumes: ["minio_data:/data"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  backend:
+    build: {context: ./sRent-backend, dockerfile: Dockerfile}
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      DATABASE_URL: jdbc:postgresql://postgres:5432/srent
+      POSTGRES_USER: ${POSTGRES_USER:-srent}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:5173}
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_PUBLIC_ENDPOINT: ${MINIO_PUBLIC_ENDPOINT:-http://localhost:9000}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-srentminio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Set MINIO_ROOT_PASSWORD in .env}
+      MINIO_PUBLIC_BUCKET: ${MINIO_PUBLIC_BUCKET:-srent-public}
+      MINIO_PRIVATE_BUCKET: ${MINIO_PRIVATE_BUCKET:-srent-private}
+      EKYC_PROVIDER: ${EKYC_PROVIDER:-mock}
+      CONTRACT_ANALYSIS_PROVIDER: ${CONTRACT_ANALYSIS_PROVIDER:-mock}
+      EKYC_ENDPOINT: ${EKYC_ENDPOINT:-}
+      EKYC_API_KEY: ${EKYC_API_KEY:-}
+      CONTRACT_ANALYSIS_ENDPOINT: ${CONTRACT_ANALYSIS_ENDPOINT:-}
+      CONTRACT_ANALYSIS_API_KEY: ${CONTRACT_ANALYSIS_API_KEY:-}
+    ports: ["${BACKEND_PORT:-3001}:3001"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      minio: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3001/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
+    restart: unless-stopped
+volumes:
+  postgres_data:
+  minio_data:

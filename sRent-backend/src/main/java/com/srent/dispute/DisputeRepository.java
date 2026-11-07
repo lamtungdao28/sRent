@@ -1,0 +1,2 @@
+package com.srent.dispute; import org.springframework.data.domain.*; import org.springframework.data.jpa.repository.*; import org.springframework.data.repository.query.Param; import java.util.*;
+public interface DisputeRepository extends JpaRepository<Dispute,UUID>{@Query("select d from Dispute d where d.booking.student.id=:u or d.booking.landlord.id=:u")Page<Dispute> findForUser(@Param("u")UUID u,Pageable p);Page<Dispute> findAllByStatusIn(Collection<Dispute.Status>s,Pageable p);long countByStatusIn(Collection<Dispute.Status>s);}

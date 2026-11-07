@@ -1,0 +1,11 @@
+package com.srent.property;
+import com.srent.common.ApiException; import com.srent.security.CurrentUser; import com.srent.user.*; import jakarta.validation.Valid; import jakarta.validation.constraints.*; import lombok.RequiredArgsConstructor; import org.springframework.http.*; import org.springframework.security.access.prepost.PreAuthorize; import org.springframework.transaction.annotation.Transactional; import org.springframework.web.bind.annotation.*; import java.math.BigDecimal; import java.util.*;
+@RestController @RequestMapping("/api/v1/properties") @RequiredArgsConstructor @PreAuthorize("hasRole('LANDLORD')")
+public class PropertyController {
+    private final PropertyRepository properties; private final UserRepository users;
+    public record Request(@NotBlank @Size(max=160) String name,@Size(max=2000) String description,@NotBlank @Size(max=255) String addressLine,@Size(max=100) String ward,@NotBlank @Size(max=100) String district,@NotBlank @Size(max=100) String city,@NotNull @DecimalMin("-90") @DecimalMax("90") BigDecimal latitude,@NotNull @DecimalMin("-180") @DecimalMax("180") BigDecimal longitude){}
+    public record Response(UUID id,String name,String description,String addressLine,String ward,String district,String city,BigDecimal latitude,BigDecimal longitude){static Response from(Property p){return new Response(p.getId(),p.getName(),p.getDescription(),p.getAddressLine(),p.getWard(),p.getDistrict(),p.getCity(),p.getLatitude(),p.getLongitude());}}
+    @PostMapping @ResponseStatus(HttpStatus.CREATED) @Transactional public Response create(@Valid @RequestBody Request r){var owner=users.findById(CurrentUser.id()).orElseThrow();var p=new Property();p.setOwner(owner);map(p,r);return Response.from(properties.save(p));}
+    @GetMapping("/my") public List<Response> mine(){return properties.findAllByOwnerIdOrderByCreatedAtDesc(CurrentUser.id()).stream().map(Response::from).toList();}
+    static void map(Property p,Request r){p.setName(r.name().trim());p.setDescription(r.description());p.setAddressLine(r.addressLine().trim());p.setWard(r.ward());p.setDistrict(r.district().trim());p.setCity(r.city().trim());p.setLatitude(r.latitude());p.setLongitude(r.longitude());}
+}

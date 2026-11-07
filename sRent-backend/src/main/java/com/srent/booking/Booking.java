@@ -1,0 +1,4 @@
+package com.srent.booking;
+import com.srent.common.BaseEntity; import com.srent.room.Room; import com.srent.user.User; import jakarta.persistence.*; import lombok.*; import java.time.LocalDate;
+@Entity @Table(name="bookings") @Getter @Setter @NoArgsConstructor
+public class Booking extends BaseEntity { public enum Status{PENDING,ACCEPTED,REJECTED,CANCELLED,COMPLETED} @ManyToOne(fetch=FetchType.LAZY) @JoinColumn(name="room_id",nullable=false) private Room room; @ManyToOne(fetch=FetchType.LAZY) @JoinColumn(name="student_id",nullable=false) private User student; @ManyToOne(fetch=FetchType.LAZY) @JoinColumn(name="landlord_id",nullable=false) private User landlord; @Column(name="move_in_date",nullable=false) private LocalDate moveInDate; private String note; @Enumerated(EnumType.STRING) @Column(nullable=false) private Status status=Status.PENDING; @Version private long version; }

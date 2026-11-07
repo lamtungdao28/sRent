@@ -1,0 +1,2 @@
+package com.srent.chat; import org.springframework.data.domain.*; import org.springframework.data.jpa.repository.*; import org.springframework.data.repository.query.Param; import java.util.*;
+public interface ConversationRepository extends JpaRepository<Conversation,UUID>{Optional<Conversation> findByRoomIdAndStudentIdAndLandlordId(UUID r,UUID s,UUID l);@Query("select c from Conversation c join fetch c.room where c.student.id=:u or c.landlord.id=:u order by c.updatedAt desc") List<Conversation> findForUser(@Param("u") UUID user);}

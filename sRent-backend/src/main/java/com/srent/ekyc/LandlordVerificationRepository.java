@@ -1,0 +1,2 @@
+package com.srent.ekyc; import org.springframework.data.domain.*; import org.springframework.data.jpa.repository.JpaRepository; import java.util.*;
+public interface LandlordVerificationRepository extends JpaRepository<LandlordVerification,UUID>{Optional<LandlordVerification> findFirstByLandlordIdOrderByCreatedAtDesc(UUID id);Page<LandlordVerification> findAllByStatusIn(Collection<LandlordVerification.Status>s,Pageable p);long countByStatusIn(Collection<LandlordVerification.Status>s);}

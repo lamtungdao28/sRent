@@ -1,0 +1,2 @@
+package com.srent.payment; import org.springframework.stereotype.Component; import java.math.BigDecimal; import java.util.UUID;
+@Component public class MockPaymentProvider implements PaymentProvider {public Result create(UUID id,BigDecimal a){return new Result(true,"mock_"+UUID.randomUUID(),"Giao dịch mô phỏng, không giữ tiền thật",true);}public Result confirm(String r){return new Result(true,r,"Xác nhận mô phỏng",true);}public String name(){return "MOCK";}}

@@ -1,0 +1,4 @@
+package com.srent.dispute;
+import com.srent.booking.Booking; import com.srent.common.BaseEntity; import com.srent.user.User; import jakarta.persistence.*; import lombok.*;
+@Entity @Table(name="disputes") @Getter @Setter @NoArgsConstructor
+public class Dispute extends BaseEntity { public enum Status{OPEN,IN_REVIEW,RESOLVED,REJECTED} @ManyToOne(fetch=FetchType.LAZY) @JoinColumn(name="booking_id",nullable=false) private Booking booking; @ManyToOne(fetch=FetchType.LAZY) @JoinColumn(name="created_by",nullable=false) private User createdBy; @Column(nullable=false) private String subject; @Column(nullable=false) private String description; @Column(name="landlord_response") private String landlordResponse; @Enumerated(EnumType.STRING) @Column(nullable=false) private Status status=Status.OPEN; @Column(name="admin_note") private String adminNote; }
