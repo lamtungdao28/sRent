@@ -13,6 +13,7 @@ docker compose logs -f backend
 ```
 
 - Health: <http://localhost:3001/actuator/health>
+- Frontend: <http://localhost:5173>
 - Swagger UI: <http://localhost:3001/swagger-ui/index.html>
 - OpenAPI JSON: <http://localhost:3001/v3/api-docs>
 - MinIO Console: <http://localhost:9001>

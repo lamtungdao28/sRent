@@ -3,6 +3,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { LoadingState } from '@/components/common/States'
 import { AppShell, AdminShell } from '@/components/layout/AppShell'
 import { ProtectedRoute, RoleGuard } from '@/routes/Guards'
+import { useAuth } from '@/providers/AuthProvider'
+import { roleHome } from '@/lib/auth-navigation'
 
 const LoginPage=lazy(()=>import('@/features/auth/AuthPages').then(m=>({default:m.LoginPage})))
 const RegisterPage=lazy(()=>import('@/features/auth/AuthPages').then(m=>({default:m.RegisterPage})))
@@ -37,13 +39,16 @@ const ForbiddenPage=lazy(()=>import('@/features/system/SystemPages').then(m=>({d
 const NotFoundPage=lazy(()=>import('@/features/system/SystemPages').then(m=>({default:m.NotFoundPage})))
 const UnauthorizedPage=lazy(()=>import('@/features/system/SystemPages').then(m=>({default:m.UnauthorizedPage})))
 
+function RoleAwareHome(){const{role}=useAuth();return role==='STUDENT'?<HomePage/>:<Navigate to={roleHome(role)} replace/>}
+
 export default function App(){return <BrowserRouter><Suspense fallback={<LoadingState label="Đang mở trang..."/>}><Routes>
   <Route path="/dang-nhap" element={<LoginPage/>}/><Route path="/dang-ky" element={<RegisterPage/>}/><Route path="/401" element={<UnauthorizedPage/>}/><Route path="/403" element={<ForbiddenPage/>}/>
   <Route element={<ProtectedRoute/>}>
     <Route element={<AppShell/>}>
-      <Route path="/tai-khoan" element={<ProfilePage/>}/>
+      <Route index element={<RoleAwareHome/>}/>
+      <Route element={<RoleGuard roles={['STUDENT','LANDLORD']}/>}><Route path="/tai-khoan" element={<ProfilePage/>}/></Route>
       <Route element={<RoleGuard roles={['STUDENT']}/>}>
-        <Route index element={<HomePage/>}/><Route path="/tim-phong" element={<SearchPage/>}/><Route path="/phong/:id" element={<RoomDetailPage/>}/><Route path="/dat-phong/:roomId" element={<BookingPage/>}/><Route path="/tin-nhan" element={<ConversationListPage/>}/><Route path="/tin-nhan/:id" element={<ChatPage/>}/><Route path="/bookings" element={<MyBookingsPage/>}/><Route path="/thanh-toan" element={<PaymentsPage/>}/><Route path="/hop-dong/:id" element={<ContractDetailPage/>}/><Route path="/ct01" element={<Ct01Page/>}/><Route path="/tranh-chap" element={<DisputesPage/>}/>
+        <Route path="/tim-phong" element={<SearchPage/>}/><Route path="/phong/:id" element={<RoomDetailPage/>}/><Route path="/dat-phong/:roomId" element={<BookingPage/>}/><Route path="/tin-nhan" element={<ConversationListPage/>}/><Route path="/tin-nhan/:id" element={<ChatPage/>}/><Route path="/bookings" element={<MyBookingsPage/>}/><Route path="/thanh-toan" element={<PaymentsPage/>}/><Route path="/hop-dong/:id" element={<ContractDetailPage/>}/><Route path="/ct01" element={<Ct01Page/>}/><Route path="/tranh-chap" element={<DisputesPage/>}/>
       </Route>
       <Route element={<RoleGuard roles={['LANDLORD']}/>}>
         <Route path="/chu-tro" element={<LandlordDashboardPage/>}/><Route path="/chu-tro/khu-tro" element={<PropertiesPage/>}/><Route path="/chu-tro/phong" element={<MyRoomsPage/>}/><Route path="/chu-tro/phong/tao" element={<RoomEditorPage/>}/><Route path="/chu-tro/phong/:id/sua" element={<RoomEditorPage/>}/><Route path="/chu-tro/phong/:roomId/video" element={<RoomVideoUploadPage/>}/><Route path="/chu-tro/xac-minh" element={<LandlordVerificationPage/>}/><Route path="/chu-tro/yeu-cau-thue" element={<LandlordBookingsPage/>}/><Route path="/chu-tro/tin-nhan" element={<ConversationListPage/>}/><Route path="/chu-tro/tin-nhan/:id" element={<ChatPage/>}/><Route path="/chu-tro/hop-dong/:id" element={<ContractDetailPage/>}/><Route path="/chu-tro/tranh-chap" element={<DisputesPage/>}/>

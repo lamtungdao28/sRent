@@ -9,7 +9,32 @@ Frontend React cho nền tảng tìm và thuê phòng trọ sinh viên S-Rent. G
 - React Router, TanStack Query, Axios
 - React Hook Form, Zod, Sonner
 
-## Cài đặt và chạy
+## Chạy toàn bộ bằng Docker
+
+Từ thư mục gốc dự án:
+
+```bash
+cp .env.example .env
+docker compose up --build -d
+docker compose ps
+```
+
+Mở `http://localhost:5173`. Container Nginx của frontend phục vụ React SPA và proxy `/api` nội bộ đến service `backend:3001`; hostname nội bộ này không xuất hiện trong trình duyệt.
+
+Các cổng có thể cấu hình trong `.env`:
+
+```text
+FRONTEND_PORT=5173
+BACKEND_PORT=3001
+```
+
+Nếu thay đổi biến `VITE_*`, cần build lại image frontend vì Vite nhúng chúng ở build time:
+
+```bash
+docker compose up --build -d frontend
+```
+
+## Chạy frontend local để phát triển
 
 Backend cần chạy tại `http://localhost:3001`:
 
@@ -28,7 +53,7 @@ npm install
 npm run dev -- --host 0.0.0.0
 ```
 
-Mở `http://localhost:5173`. Vite proxy `/api` đến Backend nên component không hardcode `localhost`.
+Mở `http://localhost:5173`. Vite proxy `/api` đến Backend nên component không hardcode `localhost`. File `.env.local` chỉ cần cho chế độ phát triển local; Docker Compose nhận biến từ file `.env` ở thư mục gốc.
 
 Build production:
 
@@ -42,6 +67,7 @@ npm run build
 |---|---|---|
 | `VITE_API_BASE_URL` | `/api/v1` | Base path REST API |
 | `VITE_ENABLE_AI_DEV_MOCKS` | `false` | Chỉ cho phép hiển thị mock AI trong development; hiện component ưu tiên dữ liệu Backend và không tự báo thành công |
+| `FRONTEND_PORT` | `5173` | Cổng host của container frontend; khai báo trong `.env` gốc |
 
 ## Tài khoản demo Backend (`dev` profile)
 

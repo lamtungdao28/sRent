@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Field, Input, Select } from '@/components/ui/Form'
 import { useAuth } from '@/providers/AuthProvider'
+import { destinationAfterAuth, roleHome } from '@/lib/auth-navigation'
 
 const loginSchema = z.object({ email: z.email('Email chưa hợp lệ'), password: z.string().min(1, 'Vui lòng nhập mật khẩu') })
 const registerSchema = z.object({ fullName: z.string().min(2, 'Họ tên cần ít nhất 2 ký tự'), email: z.email('Email chưa hợp lệ'), password: z.string().min(8, 'Mật khẩu cần ít nhất 8 ký tự').max(72), role: z.enum(['STUDENT','LANDLORD']) })
@@ -22,14 +23,14 @@ function AuthFrame({ title, description, children }: { title: string; descriptio
 export function LoginPage() {
   const { user, authenticate } = useAuth(); const navigate = useNavigate(); const location = useLocation()
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginValues>({ resolver: zodResolver(loginSchema), defaultValues: { email: '', password: '' } })
-  if (user) return <Navigate to={user.role==='ADMIN'?'/admin':user.role==='LANDLORD'?'/chu-tro':'/'} replace/>
-  const submit = async (values: LoginValues) => { try { const data = await authApi.login(values); await authenticate(data); toast.success('Đăng nhập thành công'); const from=(location.state as {from?:string}|null)?.from; navigate(from || (data.role==='ADMIN'?'/admin':data.role==='LANDLORD'?'/chu-tro':'/'),{replace:true}) } catch(e){ toast.error(errorMessage(e)) } }
+  if (user) return <Navigate to={roleHome(user.role)} replace/>
+  const submit = async (values: LoginValues) => { try { const data = await authApi.login(values); await authenticate(data); toast.success('Đăng nhập thành công'); const from=(location.state as {from?:string}|null)?.from; navigate(destinationAfterAuth(data.role,from),{replace:true}) } catch(e){ toast.error(errorMessage(e)) } }
   return <AuthFrame title="Chào mừng trở lại" description="Đăng nhập để tiếp tục hành trình thuê trọ của bạn."><form className="space-y-4" onSubmit={handleSubmit(submit)}><Field label="Email" error={errors.email?.message}><div className="relative"><Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400"/><Input className="pl-10" type="email" autoComplete="email" placeholder="ban@example.com" {...register('email')}/></div></Field><Field label="Mật khẩu" error={errors.password?.message}><div className="relative"><LockKeyhole className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400"/><Input className="pl-10" type="password" autoComplete="current-password" {...register('password')}/></div></Field><Button className="w-full" loading={isSubmitting}>Đăng nhập</Button></form><div className="mt-5 rounded-xl bg-sky-50 p-3 text-xs leading-5 text-sky-900"><strong>Tài khoản development:</strong><br/>student@srent.local / Student@123<br/>landlord@srent.local / Landlord@123</div><p className="mt-5 text-center text-sm text-slate-600">Chưa có tài khoản? <Link className="font-semibold text-brand-700 hover:underline" to="/dang-ky">Đăng ký</Link></p></AuthFrame>
 }
 
 export function RegisterPage() {
   const { user, authenticate }=useAuth(); const navigate=useNavigate(); const {register,handleSubmit,formState:{errors,isSubmitting}}=useForm<RegisterValues>({resolver:zodResolver(registerSchema),defaultValues:{fullName:'',email:'',password:'',role:'STUDENT'}})
-  if(user)return<Navigate to="/" replace/>
+  if(user)return<Navigate to={roleHome(user.role)} replace/>
   const submit=async(values:RegisterValues)=>{try{const data=await authApi.register(values);await authenticate(data);toast.success('Tạo tài khoản thành công');navigate(data.role==='LANDLORD'?'/chu-tro':'/')}catch(e){toast.error(errorMessage(e))}}
   return <AuthFrame title="Tạo tài khoản S-Rent" description="Chọn đúng vai trò để chúng tôi chuẩn bị trải nghiệm phù hợp."><form className="space-y-4" onSubmit={handleSubmit(submit)}><Field label="Họ và tên" error={errors.fullName?.message}><Input autoComplete="name" {...register('fullName')}/></Field><Field label="Email" error={errors.email?.message}><Input type="email" autoComplete="email" {...register('email')}/></Field><Field label="Mật khẩu" hint="Tối thiểu 8 ký tự" error={errors.password?.message}><Input type="password" autoComplete="new-password" {...register('password')}/></Field><Field label="Bạn sử dụng S-Rent với vai trò" error={errors.role?.message}><Select {...register('role')}><option value="STUDENT">Sinh viên tìm phòng</option><option value="LANDLORD">Chủ trọ đăng phòng</option></Select></Field><Button className="w-full" loading={isSubmitting}>Tạo tài khoản</Button></form><p className="mt-5 text-center text-sm">Đã có tài khoản? <Link className="font-semibold text-brand-700" to="/dang-nhap">Đăng nhập</Link></p></AuthFrame>
 }

@@ -3,6 +3,7 @@ import { Bell, Building2, CalendarCheck2, FileSearch, Home, House, LayoutDashboa
 import { useState } from 'react'
 import { useAuth } from '@/providers/AuthProvider'
 import { cn } from '@/lib/utils'
+import { roleHome } from '@/lib/auth-navigation'
 
 const studentNav = [
   { to: '/', label: 'Trang chủ', icon: Home }, { to: '/tim-phong', label: 'Tìm phòng', icon: Search },
@@ -19,7 +20,7 @@ const adminNav = [
   { to: '/admin/tranh-chap', label: 'Tranh chấp', icon: Scale }, { to: '/admin/giao-dich', label: 'Giao dịch', icon: WalletCards },
 ]
 
-function Logo() { return <Link to="/" className="flex items-center gap-2.5 rounded-lg"><span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-700 text-white"><House className="h-5 w-5"/></span><span><strong className="block text-lg leading-5 text-slate-950">S-Rent</strong><small className="text-xs text-slate-500">Thuê trọ an tâm</small></span></Link> }
+function Logo() { const { role }=useAuth(); return <Link to={roleHome(role)} className="flex items-center gap-2.5 rounded-lg"><span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-700 text-white"><House className="h-5 w-5"/></span><span><strong className="block text-lg leading-5 text-slate-950">S-Rent</strong><small className="text-xs text-slate-500">Thuê trọ an tâm</small></span></Link> }
 
 export function AppShell() {
   const { role, user, logout } = useAuth()
